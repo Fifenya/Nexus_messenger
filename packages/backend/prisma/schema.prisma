@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  phone         String   @unique
+  username      String   @unique
+  publicKey     String
+  displayName   String?
+  avatarUrl     String?
+  password      String?  // Добавляем поле для пароля
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  chats         ChatMember[]
+  messages      Message[]
+  ownedMotes    NexusMote[]
+  privacy       PrivacySetting[]
+  bots          Bot[]
+  reactions     MessageReaction[]
+  inviteLinks   InviteLink[]
+
+  @@map("users")
+}
+
+model Chat {
+  id          String   @id @default(cuid())
+  type        String   @default("PRIVATE")
+  title       String?
+  avatarUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     ChatMember[]
+  messages    Message[]
+  inviteLinks InviteLink[]
+
+  @@map("chats")
+}
+
+model ChatMember {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  role      String   @default("MEMBER")
+  joinedAt  DateTime @default(now())
+
+  @@unique([userId, chatId])
+  @@map("chat_members")
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  chatId      String
+  chat        Chat     @relation(fields: [chatId], references: [id])
+  senderId    String
+  sender      User     @relation(fields: [senderId], references: [id])
+  text        String?
+  replyToId   String?
+  editedAt    DateTime?
+  deletedAt   DateTime?
+  deleteTimer Int?
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reactions   MessageReaction[]
+  attachments MessageAttachment[]
+
+  @@index([chatId, createdAt])
+  @@map("messages")
+}
+
+model MessageAttachment {
+  id        String   @id @default(cuid())
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id])
+  type      String
+  url       String
+  size      Int?
+  mimeType  String?
+  createdAt DateTime @default(now())
+
+  @@map("message_attachments")
+}
+
+model MessageReaction {
+  id        String   @id @default(cuid())
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  emoji     String
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId, emoji])
+  @@map("message_reactions")
+}
+
+model NexusMote {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  tags      String
+  width     Int?
+  height    Int?
+  ownerId   String   @unique
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("nexus_motes")
+}
+
+model Bot {
+  id          String   @id @default(cuid())
+  token       String   @unique
+  name        String
+  username    String   @unique
+  description String?
+  avatarUrl   String?
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  webhookUrl  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("bots")
+}
+
+model InviteLink {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  chatId      String
+  chat        Chat     @relation(fields: [chatId], references: [id])
+  creatorId   String
+  creator     User     @relation(fields: [creatorId], references: [id])
+  uses        Int      @default(0)
+  maxUses     Int?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("invite_links")
+}
+
+model PrivacySetting {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  field     String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, field])
+  @@map("privacy_settings")
+}
