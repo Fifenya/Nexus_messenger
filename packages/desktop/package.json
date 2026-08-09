@@ -1,0 +1,31 @@
+{
+  "name": "@nexus/desktop",
+  "version": "1.0.0",
+  "description": "Nexus Desktop — secure messenger",
+  "homepage": "https://github.com/Fifenya/Rebuild",
+  "main": "main.js",
+  "author": {
+    "name": "Nexus Team",
+    "email": "nexus@example.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"cd ../frontend && npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "cd ../frontend && npm run build",
+    "pack": "electron-builder --dir",
+    "dist:linux": "electron-builder --linux --x64",
+    "dist:windows": "electron-builder --win --x64",
+    "dist:mac": "electron-builder --mac --x64",
+    "dist:all": "electron-builder -mwl"
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.7",
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "wait-on": "^7.2.0"
+  }
+}

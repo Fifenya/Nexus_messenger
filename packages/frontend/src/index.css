@@ -2,143 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* Переменные тем будут переопределяться динамически */
-    --bg-primary: #1a1a2e;
-    --bg-secondary: #252540;
-    --text-primary: #e2e2e2;
-    --text-secondary: #a0a0c0;
-    --accent: #5b6abf;
-    --accent-hover: #7b8adf;
-    --border: #3a3a5a;
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: var(--font-family);
-    transition: background-color 0.2s, color 0.2s;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 3px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-hover);
-  }
+/* ========== NEXUS DESIGN SYSTEM ========== */
+:root {
+  --color-background: #0a0a0a;
+  --color-background-secondary: #131315;
+  --color-surface: #1d1d20;
+  --color-accent: #dc2626;
+  --color-accent-hover: #ef4444;
+  --color-text: #f5f5f7;
+  --color-text-muted: #8e8e93;
+  --color-border: #2a2a2d;
+  --color-error: #ff453a;
+  --color-success: #30d158;
 }
 
-@layer components {
-  .nexus-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
+* { scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+*::-webkit-scrollbar-track { background: transparent; }
 
-  .nexus-card {
-    @apply bg-[var(--bg-secondary)] rounded-xl border border-[var(--border)] p-4;
-  }
+html, body, #root { height: 100%; }
 
-  .nexus-input {
-    @apply w-full bg-[var(--bg-input)] text-[var(--text-primary)] border border-[var(--border)] rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent;
-  }
-
-  .nexus-btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors transition-transform active:scale-95;
-  }
-
-  .nexus-btn-primary {
-    @apply nexus-btn bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)];
-  }
-
-  .nexus-btn-secondary {
-    @apply nexus-btn bg-[var(--bg-third)] text-[var(--text-primary)] hover:bg-[var(--border)];
-  }
-
-  .nexus-btn-danger {
-    @apply nexus-btn bg-red-500 text-white hover:bg-red-600;
-  }
-
-  .nexus-avatar {
-    @apply w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold;
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  }
-
-  .nexus-avatar img {
-    @apply w-full h-full rounded-full object-cover;
-  }
-
-  .nexus-message-own {
-    @apply bg-[var(--message-own)] text-[var(--message-own-text)] rounded-2xl rounded-br-none px-4 py-2 max-w-[70%] self-end;
-  }
-
-  .nexus-message-other {
-    @apply bg-[var(--message-other)] text-[var(--message-other-text)] rounded-2xl rounded-bl-none px-4 py-2 max-w-[70%] self-start;
-  }
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  transition: background-color .25s ease, color .25s ease;
 }
 
-@layer utilities {
-  .animate-message-in {
-    animation: messageSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes messageSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  .animate-typing {
-    animation: typingBounce 1.4s infinite;
-  }
-
-  @keyframes typingBounce {
-    0%,
-    60%,
-    100% {
-      transform: translateY(0);
-    }
-    30% {
-      transform: translateY(-6px);
-    }
-  }
-
-  .animate-reaction {
-    animation: reactionPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  @keyframes reactionPop {
-    from {
-      transform: scale(0);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
+/* Кнопки */
+.btn-accent {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  background: linear-gradient(135deg, var(--color-accent-hover), var(--color-accent));
+  color: #fff; font-weight: 600; border: none; border-radius: 12px;
+  padding: .65rem 1.25rem; cursor: pointer;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 35%, transparent);
+  transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
 }
+.btn-accent:hover { filter: brightness(1.1); }
+.btn-accent:active { transform: scale(.97); }
+.btn-accent:disabled { opacity: .5; pointer-events: none; }
+
+.icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+  color: var(--color-text-muted); background: transparent;
+  transition: background .15s, color .15s;
+}
+.icon-btn:hover { background: color-mix(in srgb, var(--color-text) 8%, transparent); color: var(--color-text); }
+
+/* Поля ввода */
+.nexus-input {
+  width: 100%; background: var(--color-background);
+  border: 1px solid var(--color-border); border-radius: 12px;
+  padding: .65rem .9rem; color: var(--color-text); outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.nexus-input::placeholder { color: var(--color-text-muted); }
+.nexus-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+
+/* Обои чата */
+.chat-wallpaper {
+  background-color: var(--color-background);
+  background-image:
+    radial-gradient(1100px 550px at 85% -10%, color-mix(in srgb, var(--color-accent) 9%, transparent), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 60%),
+    radial-gradient(color-mix(in srgb, var(--color-text) 4%, transparent) 1px, transparent 1.4px);
+  background-size: auto, auto, 22px 22px;
+}
+
+/* Пузырьки сообщений */
+.bubble {
+  position: relative; max-width: min(78%, 560px);
+  padding: .5rem .75rem; border-radius: 16px;
+  line-height: 1.45; font-size: .925rem; word-break: break-word;
+  box-shadow: 0 1px 2px rgb(0 0 0 / .3);
+  animation: msg-in .18s ease-out;
+}
+.bubble-in { background: var(--color-surface); border-bottom-left-radius: 6px; }
+.bubble-out {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent) 94%, #fff 6%),
+    color-mix(in srgb, var(--color-accent) 76%, #000 24%));
+  border-bottom-right-radius: 6px; color: #fff;
+}
+.bubble-time {
+  float: right; margin: .6rem 0 0 .5rem;
+  font-size: .65rem; opacity: .65; user-select: none;
+  display: inline-flex; align-items: center; gap: 2px;
+}
+
+/* Чип даты */
+.date-chip {
+  align-self: center; padding: .25rem .75rem; border-radius: 99px;
+  font-size: .72rem; font-weight: 600; color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-background) 70%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+/* Строка списка чатов */
+.chat-row { transition: background .12s; }
+.chat-row:hover { background: color-mix(in srgb, var(--color-text) 5%, transparent); }
+.chat-row.active { background: color-mix(in srgb, var(--color-accent) 16%, transparent); }
+
+.badge-unread {
+  min-width: 20px; height: 20px; padding: 0 6px; border-radius: 99px;
+  background: var(--color-accent); color: #fff;
+  font-size: .7rem; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* Анимации */
+@keyframes msg-in { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px) scale(.95); } to { opacity: 1; transform: none; } }
+.animate-fade-in { animation: fadeIn .3s ease-out forwards; }
+@keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+.animate-typing { animation: typingBounce 1.4s infinite; }
+@keyframes reactionPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.animate-reaction { animation: reactionPop .3s cubic-bezier(.34,1.56,.64,1); }
+
+.ring-pulse { box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 45%, transparent); }

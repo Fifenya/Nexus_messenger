@@ -1,3 +1,17 @@
-rootProject.name = 'Nexus'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+}
+
+rootProject.name = "nexus-mobile"
+
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+applyNativeModulesSettingsGradle(settings)
+
 include ':app'
+
+// Подключаем react-native-gradle-plugin из node_modules (он НЕ в Maven Central)
 includeBuild('../node_modules/@react-native/gradle-plugin')

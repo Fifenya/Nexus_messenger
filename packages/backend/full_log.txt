@@ -1,0 +1,70 @@
+
+> @nexus/backend@1.0.0 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m03:34:19[0m] Starting compilation in watch mode...
+
+[96msrc/auth/auth.service.ts[0m:[93m37[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '{ username: string; password: any; displayName: string; email: string; }' is not assignable to type '(Without<UserCreateInput, UserUncheckedCreateInput> & UserUncheckedCreateInput) | (Without<...> & UserCreateInput)'.
+  Type '{ username: string; password: any; displayName: string; email: string; }' is not assignable to type 'Without<UserUncheckedCreateInput, UserCreateInput> & UserCreateInput'.
+    Type '{ username: string; password: any; displayName: string; email: string; }' is missing the following properties from type 'UserCreateInput': phone, publicKey
+
+[7m37[0m       data: {
+[7m  [0m [91m      ~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m2907[0m:[93m5[0m
+    [7m2907[0m     data: XOR<UserCreateInput, UserUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: UserSelect<DefaultArgs>; omit?: UserOmit<DefaultArgs>; include?: UserInclude<DefaultArgs>; data: (Without<...> & UserUncheckedCreateInput) | (Without<...> & UserCreateInput); }'
+
+[96msrc/chats/chats.service.ts[0m:[93m37[0m:[93m9[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'title' does not exist in type '(Without<ChatCreateInput, ChatUncheckedCreateInput> & ChatUncheckedCreateInput) | (Without<...> & ChatCreateInput)'.
+
+[7m37[0m         title: dto.type === 'GROUP' ? dto.title ?? 'New group' : null,
+[7m  [0m [91m        ~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m5461[0m:[93m5[0m
+    [7m5461[0m     data: XOR<ChatCreateInput, ChatUncheckedCreateInput>
+    [7m    [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: ChatSelect<DefaultArgs>; omit?: ChatOmit<DefaultArgs>; include?: ChatInclude<DefaultArgs>; data: (Without<...> & ChatUncheckedCreateInput) | (Without<...> & ChatCreateInput); }'
+
+[96msrc/chats/chats.service.ts[0m:[93m74[0m:[93m16[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'userId_chatId' does not exist in type 'ChatMemberWhereUniqueInput'.
+
+[7m74[0m       where: { userId_chatId: { userId, chatId } },
+[7m  [0m [91m               ~~~~~~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m12826[0m:[93m5[0m
+    [7m12826[0m     where: ChatMemberWhereUniqueInput
+    [7m     [0m [96m    ~~~~~[0m
+    The expected type comes from property 'where' which is declared here on type '{ select?: ChatMemberSelect<DefaultArgs>; omit?: ChatMemberOmit<DefaultArgs>; include?: ChatMemberInclude<DefaultArgs>; where: ChatMemberWhereUniqueInput; }'
+
+[96msrc/messages/messages.service.ts[0m:[93m31[0m:[93m15[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'create' does not exist in type 'string[] | MessageCreateattachmentsInput'.
+
+[7m31[0m               create: dto.attachments.map((a) => ({
+[7m  [0m [91m              ~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m14353[0m:[93m5[0m
+    [7m14353[0m     attachments?: MessageCreateattachmentsInput | string[]
+    [7m     [0m [96m    ~~~~~~~~~~~[0m
+    The expected type comes from property 'attachments' which is declared here on type '(Without<MessageCreateInput, MessageUncheckedCreateInput> & MessageUncheckedCreateInput) | (Without<...> & MessageCreateInput)'
+
+[96msrc/messages/messages.service.ts[0m:[93m41[0m:[93m70[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'attachments' does not exist in type 'MessageInclude<DefaultArgs>'.
+
+[7m41[0m       include: { sender: { select: SENDER_SELECT }, reactions: true, attachments: true },
+[7m  [0m [91m                                                                     ~~~~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m4331[0m:[93m5[0m
+    [7m4331[0m     include?: MessageInclude<ExtArgs> | null
+    [7m    [0m [96m    ~~~~~~~[0m
+    The expected type comes from property 'include' which is declared here on type '{ select?: MessageSelect<DefaultArgs>; omit?: MessageOmit<DefaultArgs>; include?: MessageInclude<DefaultArgs>; data: (Without<...> & MessageUncheckedCreateInput) | (Without<...> & MessageCreateInput); }'
+
+[96msrc/messages/messages.service.ts[0m:[93m60[0m:[93m70[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'attachments' does not exist in type 'MessageInclude<DefaultArgs>'.
+
+[7m60[0m       include: { sender: { select: SENDER_SELECT }, reactions: true, attachments: true },
+[7m  [0m [91m                                                                     ~~~~~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m4284[0m:[93m5[0m
+    [7m4284[0m     include?: MessageInclude<ExtArgs> | null
+    [7m    [0m [96m    ~~~~~~~[0m
+    The expected type comes from property 'include' which is declared here on type '{ select?: MessageSelect<DefaultArgs>; omit?: MessageOmit<DefaultArgs>; include?: MessageInclude<DefaultArgs>; ... 5 more ...; distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]; }'
+
+[[90m03:34:29[0m] Found 6 errors. Watching for file changes.
+

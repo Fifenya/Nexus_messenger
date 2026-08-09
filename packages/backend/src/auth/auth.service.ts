@@ -83,7 +83,7 @@ export class AuthService {
         username: user.username,
         displayName: user.displayName,
         avatarUrl: user.avatarUrl,
-        bio: user.bio,
+        bio: user.bio  || '',
       },
     };
   }

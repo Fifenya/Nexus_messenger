@@ -1,25 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Android 13+ granular media permissions -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <!-- Android 12 and below -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
+      android:icon="@mipmap/ic_launcher_classic"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      android:theme="@style/AppTheme"
-      android:usesCleartextTraffic="true"
-      android:supportsRtl="true">
+      android:theme="@style/AppTheme">
+
+      <!-- Основная активность с intent-filter для React Native CLI -->
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -28,9 +19,101 @@
         android:windowSoftInputMode="adjustResize"
         android:exported="true">
         <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+
+      <activity-alias
+        android:name=".MainActivityBubble"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_bubble"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name=".MainActivityClassic"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_classic"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="true">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name=".MainActivityCrimson"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_crimson"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name=".MainActivityEmboss"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_emboss"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name=".MainActivityLight"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_light"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name=".MainActivityLine"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_line"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name=".MainActivityNeon"
+        android:targetActivity=".MainActivity"
+        android:icon="@mipmap/ic_launcher_neon"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:exported="true"
+        android:enabled="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
     </application>
 </manifest>

@@ -1,13 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus Messenger</title>
+
+    <!-- Иконка вкладки браузера.
+         ⚠️ Если у тебя нет варианта "classic" — замени в обеих строках
+         "classic" на имя своей иконки по умолчанию (например "neon") -->
+    <link rel="icon" type="image/png" href="/icons/classic-192.png" />
+    <link rel="apple-touch-icon" href="/icons/classic-512.png" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta
+      name="description"
+      content="Nexus — защищённый мессенджер: чаты, файлы, Nexus Motes."
+    />
+
+    <title>Nexus</title>
+
+    <!-- Тёмный фон и спиннер ДО загрузки React, чтобы не мигало белым -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #0a0a0a;
+        height: 100%;
+      }
+      .nexus-splash {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #a1a1aa;
+        font-family: 'Inter', -apple-system, sans-serif;
+      }
+      .nexus-splash-spinner {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 3px solid #252525;
+        border-top-color: #dc2626;
+        animation: nexus-spin 0.9s linear infinite;
+      }
+      @keyframes nexus-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Этот блок исчезнет сам, когда React смонтирует приложение -->
+    <div id="root">
+      <div class="nexus-splash">
+        <div class="nexus-splash-spinner"></div>
+        <div>Загрузка Nexus…</div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
