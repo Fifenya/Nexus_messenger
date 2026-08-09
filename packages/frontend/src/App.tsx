@@ -11,6 +11,9 @@ const ProfilePage = React.lazy(() => import('./pages/ProfilePage'));
 const ContactsPage = React.lazy(() => import('./pages/ContactsPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
+const ThemesPage = React.lazy(() => import('./pages/ThemesPage'));
+const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const BotsPage = React.lazy(() => import('./pages/BotsPage'));
 
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { error?: Error }> {
   state = { error: undefined as Error | undefined };
@@ -62,6 +65,9 @@ function App() {
             <Route path="/contacts" element={<PrivateRoute><ContactsPage /></PrivateRoute>} />
             <Route path="/me" element={<PrivateRoute><MePage /></PrivateRoute>} />
             <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
+            <Route path="/themes" element={<PrivateRoute><ThemesPage /></PrivateRoute>} />
+            <Route path="/privacy" element={<PrivateRoute><PrivacyPage /></PrivateRoute>} />
+            <Route path="/bots" element={<PrivateRoute><BotsPage /></PrivateRoute>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </BrowserRouter>

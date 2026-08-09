@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Check, Database, LogOut, Palette, User as UserIcon } from 'lucide-react';
+import { Bell, Bot, Check, Database, LogOut, Palette, Shield, User as UserIcon } from 'lucide-react';
 import { useAuthStore } from '../store/auth.store';
-import { useThemeStore, NEXUS_DARK_THEME, NEXUS_CYBERPUNK_THEME } from '../store/themeStore';
 import { api } from '../utils/api';
 import BottomNav from '../components/BottomNav';
 
 function Row({ color, icon: Icon, title, sub, onClick }: any) {
   return (
-    <button className="w-full flex items-center gap-4 p-3 text-left active:opacity-70" onClick={onClick} disabled={!onClick}>
+    <button className="w-full flex items-center gap-4 p-3 text-left active:opacity-70" onClick={onClick}>
       <span className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0" style={{ background: color }}>
         <Icon size={20} />
       </span>
@@ -25,7 +24,6 @@ export default function SettingsPage() {
   const user = useAuthStore(s => s.user);
   const logout = useAuthStore(s => s.logout);
   const updateUser = useAuthStore(s => s.updateUser);
-  const { currentTheme, setTheme, resetTheme } = useThemeStore();
   const [open, setOpen] = useState<string | null>(null);
   const [name, setName] = useState(user?.displayName || '');
   const [bio, setBio] = useState(user?.bio || '');
@@ -58,15 +56,12 @@ export default function SettingsPage() {
               <button className="btn-accent w-full" onClick={save}>{saved ? <Check size={18} /> : 'Сохранить'}</button>
             </div>
           )}
-          <Row color="#e0a03c" icon={Palette} title="Оформление" sub="Темы: Nexus Dark / Cyberpunk"
-            onClick={() => setOpen(o => o === 'theme' ? null : 'theme')} />
-          {open === 'theme' && (
-            <div className="px-3 pb-3 flex flex-wrap gap-2">
-              <button className="btn-accent" style={currentTheme.name === NEXUS_DARK_THEME.name ? {} : { filter: 'grayscale(70%)', opacity: .6 }} onClick={() => setTheme(NEXUS_DARK_THEME)}>Nexus Dark</button>
-              <button className="btn-accent" style={currentTheme.name === NEXUS_CYBERPUNK_THEME.name ? {} : { filter: 'grayscale(70%)', opacity: .6 }} onClick={() => setTheme(NEXUS_CYBERPUNK_THEME)}>Cyberpunk</button>
-              <button className="icon-btn" onClick={resetTheme}><Palette size={18} /></button>
-            </div>
-          )}
+        </section>
+
+        <section className="rounded-2xl border overflow-hidden" style={card}>
+          <Row color="#e0a03c" icon={Palette} title="Оформление" sub="Серверные темы" onClick={() => navigate('/themes')} />
+          <Row color="#9c27b0" icon={Bot} title="Боты" sub="Создавай своих ботов" onClick={() => navigate('/bots')} />
+          <Row color="#4caf50" icon={Shield} title="Приватность" sub="Кто видит, запрет пересылки" onClick={() => navigate('/privacy')} />
         </section>
 
         <section className="rounded-2xl border overflow-hidden" style={card}>
@@ -75,8 +70,7 @@ export default function SettingsPage() {
         </section>
 
         <section className="rounded-2xl border overflow-hidden" style={card}>
-          <button className="w-full flex items-center gap-4 p-3 text-left"
-            style={{ color: 'var(--color-error)' }}
+          <button className="w-full flex items-center gap-4 p-3 text-left" style={{ color: 'var(--color-error)' }}
             onClick={() => { logout(); navigate('/login'); }}>
             <LogOut size={20} /> <span className="font-semibold">Выйти из аккаунта</span>
           </button>

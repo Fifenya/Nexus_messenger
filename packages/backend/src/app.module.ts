@@ -19,7 +19,11 @@ import { UploadsModule } from './uploads/uploads.module';
     ChatsModule,
     MessagesModule,
     GatewayModule,
-    UploadsModule,
+    BotsModule,
+  NexusMotesModule,
+  ThemesModule,
+  PrivacyModule,
+  UploadsModule,
   ],
 })
 export class AppModule {}
