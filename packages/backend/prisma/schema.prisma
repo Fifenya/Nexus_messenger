@@ -33,6 +33,7 @@ model User {
   inviteLinks      InviteLink[]
   createdChats     Chat[]            @relation("ChatCreator")
   themes      Theme[]
+  themes      Theme[]
 }
 
 model Chat {
@@ -164,6 +165,19 @@ model InviteLink {
 
   chat    Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
   creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
+model Theme {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  colors      Json     // { background, surface, accent, text, ... }
+  isDefault   Boolean  @default(false)
+  isPublic    Boolean  @default(false)
+  authorId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
 }
 
 model Theme {
