@@ -13,3 +13,4 @@ uploads/
 
 # системное
 .DS_Store
+.env
