@@ -1,0 +1,30 @@
+{
+  "name": "nexus-mobile",
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "npm install && cd packages/backend && npm install && cd ../frontend && npm install && cd ../../client && npm install",
+    "dev:backend": "cd packages/backend && npm run start:dev",
+    "dev:frontend": "cd packages/frontend && npm run dev",
+    "build:backend": "cd packages/backend && npm run build",
+    "build:frontend": "cd packages/frontend && npm run build",
+    "start:backend": "cd packages/backend && npm run start:prod",
+    "start:frontend": "cd packages/frontend && npm run preview",
+    "termux:setup": "bash termux-setup.sh",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop nexus",
+    "pm2:restart": "pm2 restart nexus",
+    "lint": "echo 'No lint configured - skipping'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "axios": "^1.18.1",
+    "react-hook-form": "^7.81.0",
+    "socket.io-client": "^4.8.3",
+    "uuid": "^14.0.1",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
+  }
+}

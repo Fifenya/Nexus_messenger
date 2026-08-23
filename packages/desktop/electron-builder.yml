@@ -1,0 +1,82 @@
+appId: com.nexus.messenger
+productName: Nexus
+copyright: Copyright © 2026 Nexus Team
+
+directories:
+  output: dist
+  buildResources: assets
+
+files:
+  - main.js
+  - preload.js
+  - assets/**/*
+  - node_modules/**/*
+  - package.json
+  - ../frontend/dist/**/*
+
+extraResources:
+  - from: ../frontend/dist
+    to: frontend
+    filter: ["**/*"]
+
+publish:
+  provider: github
+  owner: Fifenya
+  repo: Rebuild
+  releaseType: release
+  channel: latest
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: assets/icon.ico
+  artifactName: "Nexus-Setup-${version}.${ext}"
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+
+linux:
+  target:
+    - target: deb
+      arch: [x64]
+    - target: AppImage
+      arch: [x64]
+  icon: assets/icon.png
+  category: Network;Chat;InstantMessaging
+  artifactName: "Nexus-${version}-${arch}.${ext}"
+  maintainer: "Nexus Team <NexusTeamMess@gmail.com>"
+  vendor: "Nexus Team"
+  synopsis: Secure messenger
+  description: |
+    Nexus — кроссплатформенный защищённый мессенджер
+    с поддержкой мгновенных сообщений, голосовых, файлов и Nexus Motes.
+  desktop:
+    Name: Nexus
+    Comment: Secure messenger
+    Categories: Network;Chat;InstantMessaging;
+    StartupWMClass: nexus-desktop
+    Terminal: false
+
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+  icon: assets/icon.icns
+  category: public.app-category.social-networking
+  artifactName: "Nexus-${version}-${arch}.${ext}"
+  hardenedRuntime: true
+  gatekeeperAssess: false
+
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications

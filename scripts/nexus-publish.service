@@ -1,0 +1,9 @@
+[Unit]
+After=nexus-tunnel.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'sleep 25; /usr/local/bin/nexus-publish-url.sh'
+
+[Install]
+WantedBy=multi-user.target

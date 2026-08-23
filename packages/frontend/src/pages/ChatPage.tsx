@@ -1,0 +1,223 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import { ArrowLeft, CheckCheck, Image as ImageIcon, Paperclip, Pencil, Send, Trash2, X } from 'lucide-react';
+import { formatLastSeen } from "../lib/time";
+import { api } from '../utils/api';
+import { useAuthStore } from '../store/auth.store';
+import ChatSidebar from '../components/ChatSidebar';
+import MotesGallery from '../components/MotesGallery';
+import { Avatar, dayLabel, fmtTime } from '../components/ui';
+
+const EMOJIS = ['👍', '❤️', '🔥', '😂', '😢', '⚡'];
+
+export default function ChatPage() {
+  const { id: chatId } = useParams();
+  const navigate = useNavigate();
+  const [messages, setMessages] = useState<any[]>([]);
+  const [chat, setChat] = useState<any>(null);
+  const [text, setText] = useState('');
+  const [editing, setEditing] = useState<any>(null);
+  const [menu, setMenu] = useState<any>(null);
+  const [typing, setTyping] = useState(false);
+  const [gallery, setGallery] = useState(false);
+  const token = useAuthStore(s => s.token);
+  const user = useAuthStore(s => s.user);
+  const socketRef = useRef<any>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const lastTyping = useRef(0);
+  const holdTimer = useRef<any>(null);
+
+  const refresh = () =>
+   api.get(`/chats/${chatId}/messages`)
+    .then(r => setMessages(Array.isArray(r.data) ? r.data : []))
+    .catch(() => {});
+
+  useEffect(() => {
+    refresh();
+    api.get('/chats').then(r => setChat((Array.isArray(r.data) ? r.data : []).find((c: any) => c.id === chatId))).catch(() => {});
+
+    const socket = io({ auth: { token } });
+    socketRef.current = socket;
+    socket.emit('chat:join', { chatId });
+    socket.on('message:new', (msg: any) => setMessages(prev => prev.some(m => m.id === msg.id) ? prev : [...prev, msg]));
+    socket.on('message:edit', refresh);
+    socket.on('message:delete', refresh);
+    socket.on('message:react', refresh);
+    socket.on('typing:start', (p: any) => {
+      if (p?.userId && p.userId !== user?.id) { setTyping(true); setTimeout(() => setTyping(false), 2500); }
+    });
+    socket.on('typing:stop', () => setTyping(false));
+    return () => socket.disconnect();
+  }, [chatId, token]);
+
+  useEffect(() => { listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' }); }, [messages.length, typing]);
+
+  const peer = chat?.type === 'PRIVATE'
+    ? (chat?.members || []).map((m: any) => m.user).find((u: any) => u && u.id !== user?.id)
+    : null;
+  const title = chat?.title || peer?.displayName || peer?.username || 'Чат';
+  const isMotes = chat?.type === 'MOTES';
+
+  const send = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!text.trim()) return;
+    if (editing) {
+      api.patch(`/messages/${editing.id}`, { text: text.trim() }).then(refresh).catch(console.error);
+      setEditing(null);
+    } else {
+      socketRef.current?.emit('message:send', { chatId, text: text.trim() });
+    }
+    setText('');
+    if (taRef.current) taRef.current.style.height = 'auto';
+  };
+
+  const onInput = (v: string) => {
+    setText(v);
+    const now = Date.now();
+    if (now - lastTyping.current > 1500) { socketRef.current?.emit('typing:start', { chatId }); lastTyping.current = now; }
+  };
+
+  const react = (msg: any, emoji: string) => {
+    api.post(`/messages/${msg.id}/reactions`, { emoji }).then(refresh).catch(console.error);
+    setMenu(null);
+  };
+
+  const del = (msg: any) => {
+    api.delete(`/messages/${msg.id}`).then(refresh).catch(console.error);
+    setMenu(null);
+  };
+
+  const attach = async (f: File) => {
+    const form = new FormData();
+    form.append('file', f);
+    try {
+      const r = await api.post('/uploads', form);
+      const url = r.data?.url || r.data;
+      await api.post(`/chats/${chatId}/messages`, { text: f.name, attachmentUrl: url });
+      refresh();
+    } catch (e) { console.error(e); }
+  };
+
+  const pickFromGallery = async (url: string) => {
+    await api.post(`/chats/${chatId}/messages`, { text: '', attachmentUrl: url }).catch(console.error);
+    refresh();
+  };
+
+  const reactionChips = (msg: any) => {
+    const arr = Array.isArray(msg.reactions) ? msg.reactions : [];
+    const grouped: Record<string, number> = {};
+    arr.forEach((r: any) => { const e = r?.emoji || r; grouped[e] = (grouped[e] || 0) + 1; });
+    return Object.entries(grouped);
+  };
+
+  return (
+    <div className="h-[100dvh] flex">
+      <div className="hidden lg:block h-full"><ChatSidebar activeId={chatId} /></div>
+
+      <main className="flex-1 flex flex-col h-full min-w-0">
+        <header className="flex items-center gap-3 px-3 py-2.5 border-b z-10"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-background-secondary)' }}>
+          <button className="icon-btn lg:hidden" onClick={() => navigate('/')}><ArrowLeft size={20} /></button>
+          <button className="flex items-center gap-3 min-w-0 flex-1" onClick={() => peer && navigate(`/user/${peer.id}`)}>
+            <Avatar name={title} imageUrl={chat?.avatarUrl || (isMotes ? '/notes.png' : peer?.avatarUrl)} size={40} online={peer?.onlineStatus === 'online'} />
+            <div className="text-left min-w-0">
+              <div className="font-bold truncate leading-tight">{title}</div>
+              <div className="text-xs truncate" style={{ color: typing ? 'var(--color-accent-hover)' : 'var(--color-text-muted)' }}>
+                {typing ? 'печатает…' : (chat?.type === 'GROUP' ? `${chat?.members?.length || 0} участников` : isMotes ? 'твоё личное пространство' : peer?.onlineStatus === 'online' ? 'в сети' : formatLastSeen(peer?.lastSeenAt))}
+              </div>
+            </div>
+          </button>
+          {isMotes && (
+            <button className="icon-btn" onClick={() => setGallery(true)} title="Галерея мотов">
+              <ImageIcon size={20} />
+            </button>
+          )}
+        </header>
+
+        <div ref={listRef} className="flex-1 overflow-y-auto chat-wallpaper px-3 md:px-8 py-4 flex flex-col gap-1.5">
+          {messages.map((msg, i) => {
+            const own = msg.senderId === user?.id;
+            const prev = messages[i - 1];
+            const newDay = !prev || new Date(prev.createdAt).toDateString() !== new Date(msg.createdAt).toDateString();
+            return (
+              <React.Fragment key={msg.id}>
+                {newDay && <div className="date-chip my-2">{dayLabel(msg.createdAt)}</div>}
+                <div className={`flex ${own ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`bubble ${own ? 'bubble-out' : 'bubble-in'}`}
+                    onContextMenu={e => { e.preventDefault(); setMenu(msg); }}
+                    onTouchStart={() => { holdTimer.current = setTimeout(() => setMenu(msg), 450); }}
+                    onTouchEnd={() => clearTimeout(holdTimer.current)}
+                    onTouchMove={() => clearTimeout(holdTimer.current)}>
+                    {msg.attachmentUrl && (
+                      /\.(png|jpe?g|gif|webp)$/i.test(msg.attachmentUrl)
+                        ? <img src={msg.attachmentUrl} alt="" className="rounded-lg max-w-full mb-1" />
+                        : <a href={msg.attachmentUrl} target="_blank" rel="noreferrer" className="underline text-sm">📎 Файл</a>
+                    )}
+                    {msg.text}
+                    {msg.editedAt && <span className="text-[10px] opacity-60"> (изм.)</span>}
+                    <span className="bubble-time">{fmtTime(msg.createdAt)}{own && <CheckCheck size={13} />}</span>
+                    {reactionChips(msg).map(([e, n]) => (
+                      <span key={e} className="animate-reaction inline-block mt-1 mr-1 px-1.5 py-0.5 rounded-full text-xs"
+                        style={{ background: 'color-mix(in srgb, var(--color-text) 12%, transparent)' }}>{e} {n > 1 ? n : ''}</span>
+                    ))}
+                  </div>
+                </div>
+              </React.Fragment>
+            );
+          })}
+          {messages.length === 0 && (
+            <div className="m-auto text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              {isMotes ? 'Сохраняй мысли, ссылки и картинки — только ты это увидишь.' : 'Сообщений пока нет — напиши первым!'}
+            </div>
+          )}
+        </div>
+
+        {editing && (
+          <div className="flex items-center gap-2 px-4 py-1.5 text-sm border-t"
+            style={{ borderColor: 'var(--color-border)', background: 'var(--color-background-secondary)', color: 'var(--color-accent-hover)' }}>
+            <Pencil size={14} /> Редактирование
+            <button className="icon-btn ml-auto" onClick={() => { setEditing(null); setText(''); }}><X size={16} /></button>
+          </div>
+        )}
+
+        <form onSubmit={send} className="flex items-end gap-2 px-3 py-3 border-t"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-background-secondary)' }}>
+          <input ref={fileRef} type="file" hidden onChange={e => { const f = e.target.files?.[0]; if (f) attach(f); e.target.value = ''; }} />
+          <button type="button" className="icon-btn shrink-0" onClick={() => fileRef.current?.click()}><Paperclip size={20} /></button>
+          <textarea ref={taRef} rows={1} className="nexus-input resize-none flex-1 max-h-[140px]" placeholder="Сообщение…"
+            value={text} onChange={e => { onInput(e.target.value); e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px'; }}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }} />
+          <button type="submit" disabled={!text.trim()} className="btn-accent !rounded-full w-12 h-12 !p-0 shrink-0"><Send size={20} /></button>
+        </form>
+      </main>
+
+      {menu && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50" onClick={() => setMenu(null)}>
+          <div className="w-full max-w-md p-4 pb-6 space-y-3 rounded-t-2xl"
+            style={{ background: 'var(--color-surface)' }} onClick={e => e.stopPropagation()}>
+            <div className="flex justify-center gap-2">
+              {EMOJIS.map(e => (
+                <button key={e} className="text-2xl p-2 rounded-full active:scale-90 transition-transform" onClick={() => react(menu, e)}>{e}</button>
+              ))}
+            </div>
+            {menu.senderId === user?.id && (
+              <div className="flex gap-2">
+                <button className="btn-accent flex-1" onClick={() => { setEditing(menu); setText(menu.text); setMenu(null); taRef.current?.focus(); }}>
+                  <Pencil size={16} /> Изменить
+                </button>
+                <button className="btn-accent flex-1" style={{ background: 'var(--color-error)', boxShadow: 'none' }} onClick={() => del(menu)}>
+                  <Trash2 size={16} /> Удалить
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {gallery && <MotesGallery onClose={() => setGallery(false)} onPick={pickFromGallery} />}
+    </div>
+  );
+}

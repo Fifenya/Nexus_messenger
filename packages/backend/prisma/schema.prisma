@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  phone         String?   @unique
+  username      String    @unique
+  email         String?   @unique
+  password      String?
+  displayName   String?
+  avatarUrl     String?
+  bio           String?
+  publicKey     String?
+  isVerified    Boolean   @default(false)
+  pushToken     String?
+  onlineStatus  String    @default("offline")
+  lastSeenAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sentMessages     Message[]         @relation("SentMessages")
+  chatMembers      ChatMember[]
+  ownedMotes       NexusMote[]
+  privacy          PrivacySetting[]
+  bots             Bot[]
+  reactions        MessageReaction[]
+  inviteLinks      InviteLink[]
+  createdChats     Chat[]            @relation("ChatCreator")
+  themes      Theme[]
+}
+
+model Chat {
+  id        String   @id @default(cuid())
+  type      String   @default("PRIVATE") // PRIVATE or GROUP
+  title     String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creator  User?         @relation("ChatCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId String?
+  members  ChatMember[]
+  messages Message[]
+  invites  InviteLink[]
+}
+
+model ChatMember {
+  id       String   @id @default(cuid())
+  chatId   String
+  userId   String
+  role     String   @default("MEMBER") // MEMBER, OWNER, ADMIN
+  joinedAt DateTime @default(now())
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chatId]) // Prisma сгенерирует индекс с именем userId_chatId (как и ожидает бэкенд)
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  chatId    String
+  senderId  String
+  text      String?
+  replyToId String?
+  editedAt  DateTime?
+  deletedAt DateTime?
+  isDeleted Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  chat        Chat             @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender      User             @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  attachments MessageAttachment[]
+  reactions   MessageReaction[]
+
+  @@index([chatId, createdAt])
+  delivered Boolean @default(false)
+  read      Boolean @default(false)
+}
+
+model MessageAttachment {
+  id        String   @id @default(cuid())
+  messageId String
+  type      String   // 'image', 'video', 'voice', 'file'
+  url       String
+  size      Int?
+  mimeType  String?
+  duration  Int?
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model MessageReaction {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji])
+}
+
+model NexusMote {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  tags      String
+  width     Int?
+  height    Int?
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model PrivacySetting {
+  id        String   @id @default(cuid())
+  userId    String
+  field     String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, field])
+}
+
+model Bot {
+  id          String   @id @default(cuid())
+  token       String   @unique
+  name        String
+  username    String   @unique
+  description String?
+  avatarUrl   String?
+  webhookUrl  String?
+  ownerId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model InviteLink {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  chatId    String
+  creatorId String
+  uses      Int       @default(0)
+  maxUses   Int?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  chat    Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
+model Theme {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  colors      Json     // { background, surface, accent, text, ... }
+  isDefault   Boolean  @default(false)
+  isPublic    Boolean  @default(false)
+  authorId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+}
+

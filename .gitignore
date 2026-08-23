@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.*
+*.log
+uploads/
+.trashed-*
+*.backup
+.DS_Store
