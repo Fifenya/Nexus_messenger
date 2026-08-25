@@ -141,10 +141,37 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 /* Текст в полях не наезжает на иконки */
 .relative > .nexus-input { padding-left: 2.75rem; }
 
-/* Кастомные обои из галереи устройства */
-html[data-wallpaper] .chat-wallpaper {
+/* Кастомные обои — только внутри чатов */
+html[data-wallpaper] .wp-custom {
   background-image: var(--chat-wallpaper) !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
+  background-size: var(--chat-wallpaper-size, cover) !important;
+  background-position: var(--chat-wallpaper-pos, center) !important;
+  background-repeat: var(--chat-wallpaper-repeat, no-repeat) !important;
 }
+
+/* Поднятая карточка при перетаскивании */
+.drag-overlay-card {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .5), 0 0 0 1px var(--color-border);
+  transform: scale(1.03);
+}
+
+/* bubble-out gradient */
+.bubble-out {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent) 88%, #ffffff) 0%,
+    var(--color-accent) 55%,
+    color-mix(in srgb, var(--color-accent) 82%, #000000) 100%) !important;
+}
+
+/* bubble-out gradient v2 */
+.bubble-out {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent) 70%, #ffffff) 0%,
+    var(--color-accent) 50%,
+    color-mix(in srgb, var(--color-accent) 65%, #000000) 100%) !important;
+}
+
+/* медиа-пузырь: картинка почти на всю ширину */
+.bubble-media { padding: 4px !important; }
+.bubble-media img, .bubble-media video { border-radius: 14px; display: block; }
+.bubble-media .bubble-time { padding: 2px 6px 2px 0; }

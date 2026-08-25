@@ -1,9 +1,9 @@
 import { MessageSquare } from "lucide-react";
 import { CircleUser } from "lucide-react";
-import { Sparkles } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Bot, Check, Database, LogOut, Palette, Shield, User as UserIcon } from 'lucide-react';
+import { Bell, Bot, Check, Database, HelpCircle, LogOut, Palette, Shield, User as UserIcon } from 'lucide-react';
 import { useAuthStore } from '../store/auth.store';
 import { api } from '../utils/api';
 import BottomNav from '../components/BottomNav';
@@ -64,14 +64,15 @@ export default function SettingsPage() {
         <section className="rounded-2xl border overflow-hidden" style={card}>
           <Row color="#2196f3" icon={MessageSquare} title="Настройки чатов" sub="Текст, обои, углы, темы" onClick={() => navigate("/chat-settings")} />
           <Row color="#e0a03c" icon={Palette} title="Оформление" sub="Серверные темы" onClick={() => navigate('/themes')} />
-          <Row color="#2196f3" icon={Sparkles} title="Стиль" sub="Обои, иконки статусов, favicon" onClick={() => navigate("/style")} />
+          <Row color="#009688" icon={BarChart3} title="Статистика" sub="Твоя активность в Nexus" onClick={() => navigate('/stats')} />
           <Row color="#9c27b0" icon={Bot} title="Боты" sub="Создавай своих ботов" onClick={() => navigate('/bots')} />
           <Row color="#4caf50" icon={Shield} title="Приватность" sub="Кто видит, запрет пересылки" onClick={() => navigate('/privacy')} />
         </section>
 
         <section className="rounded-2xl border overflow-hidden" style={card}>
-          <Row color="#e05050" icon={Bell} title="Уведомления" sub="Скоро" />
-          <Row color="#8774e1" icon={Database} title="Данные и память" sub="Скоро" />
+          <Row color="#e05050" icon={Bell} title="Уведомления" sub="Звук, браузерные, превью" onClick={() => navigate('/notifications')} />
+          <Row color="#8774e1" icon={Database} title="Данные и память" sub="Хранилище, кэш, автозагрузка" onClick={() => navigate('/storage')} />
+          <Row color="#009688" icon={HelpCircle} title="Nexus Support" sub="Справка и руководство по функциям" onClick={() => navigate('/support')} />
         </section>
 
         <section className="rounded-2xl border overflow-hidden" style={card}>

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check, AtSign, Cake, Sparkles, LogOut } from 'lucide-react';
 import { useAuthStore } from '../store/auth.store';
+import { Avatar } from '../components/ui';
+import AvatarCropModal from '../components/AvatarCropModal';
 import { api } from '../utils/api';
 
 const IconBox = ({ bg, children }: any) => (
@@ -22,6 +24,22 @@ export default function AccountPage() {
   const [bday, setBday] = useState(localStorage.getItem('nexus-bday') || '');
   const [showBday, setShowBday] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [cropFile, setCropFile] = useState<File | null>(null);
+  const [avatarBusy, setAvatarBusy] = useState(false);
+  const avatarRef = useRef<HTMLInputElement>(null);
+
+  const onAvatarDone = async (blob: Blob) => {
+    setCropFile(null); setAvatarBusy(true);
+    try {
+      const form = new FormData();
+      form.append('file', new File([blob], 'avatar.png', { type: 'image/png' }));
+      const r = await api.post('/uploads', form);
+      const url = r.data?.url || r.data;
+      await api.patch('/users/me', { avatarUrl: url });
+      updateUser({ avatarUrl: url });
+    } catch (e) { console.error(e); }
+    setAvatarBusy(false);
+  };
 
   const save = async () => {
     setSaving(true);
@@ -50,6 +68,18 @@ export default function AccountPage() {
       </header>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-2xl mx-auto w-full pb-24">
+        <section className="rounded-2xl p-4 flex items-center gap-4" style={{ background: 'var(--color-surface)' }}>
+          <Avatar name={user?.displayName || user?.username || ''} imageUrl={user?.avatarUrl} size={72} />
+          <div className="flex-1 min-w-0">
+            <div className="font-medium">Фотография профиля</div>
+            <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{avatarBusy ? 'Загрузка…' : 'Превью и положение'}</div>
+          </div>
+          <input ref={avatarRef} type="file" accept="image/*" hidden
+            onChange={e => { const f = e.target.files?.[0]; if (f) setCropFile(f); e.target.value = ''; }} />
+          <button className="btn-accent" onClick={() => avatarRef.current?.click()}>Изменить</button>
+        </section>
+        {cropFile && <AvatarCropModal file={cropFile} onDone={onAvatarDone} onClose={() => setCropFile(null)} />}
+
         <section className="rounded-2xl p-4 space-y-3" style={{ background: 'var(--color-surface)' }}>
           <div className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>Ваше имя</div>
           <input value={first} onChange={e => setFirst(e.target.value)} placeholder="Имя" className="nexus-input w-full" />

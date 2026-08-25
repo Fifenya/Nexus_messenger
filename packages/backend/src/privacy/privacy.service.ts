@@ -9,7 +9,7 @@ export class PrivacyService {
     const settings = await this.db.privacySetting.findMany({ where: { userId } });
     if (settings.length === 0) {
       const defaults = {
-        phoneVisibility: 'EVERYONE',
+        searchVisibility: 'NAME',
         forwardRestriction: 'false',
         autoDeleteTimer: '0',
         lastSeen: 'EVERYONE',

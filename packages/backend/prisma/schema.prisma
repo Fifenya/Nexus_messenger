@@ -30,9 +30,12 @@ model User {
   privacy          PrivacySetting[]
   bots             Bot[]
   reactions        MessageReaction[]
+  views            MessageView[]
   inviteLinks      InviteLink[]
   createdChats     Chat[]            @relation("ChatCreator")
   themes      Theme[]
+  isBot       Boolean  @default(false)
+  botProfile  Bot?     @relation("BotUser")
 }
 
 model Chat {
@@ -61,6 +64,8 @@ model ChatMember {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, chatId]) // Prisma сгенерирует индекс с именем userId_chatId (как и ожидает бэкенд)
+  pinned    Boolean  @default(false)
+  sortOrder Int      @default(0)
 }
 
 model Message {
@@ -79,6 +84,7 @@ model Message {
   sender      User             @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
   attachments MessageAttachment[]
   reactions   MessageReaction[]
+  views       MessageView[]
 
   @@index([chatId, createdAt])
   delivered Boolean @default(false)
@@ -96,6 +102,18 @@ model MessageAttachment {
   createdAt DateTime @default(now())
 
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model MessageView {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  viewedAt  DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
 }
 
 model MessageReaction {
@@ -151,6 +169,9 @@ model Bot {
   updatedAt   DateTime @updatedAt
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  apiId       String?  @unique
+  userId      String?  @unique
+  botUser     User?    @relation("BotUser", fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model InviteLink {
@@ -181,3 +202,5 @@ model Theme {
   author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
 }
 
+
+// Добавляем поля в ChatMember для закрепления и сортировки

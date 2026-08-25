@@ -16,6 +16,8 @@ import { ChatsService } from '../chats/chats.service';
 import { MessagesService } from '../messages/messages.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
+export const gatewayServer: { current?: Server } = {};
+
 interface AuthedSocket extends Socket {
   userId?: string;
 }
@@ -26,6 +28,10 @@ interface AuthedSocket extends Socket {
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
+
+  afterInit(server: Server) {
+    gatewayServer.current = server;
+  }
 
   private readonly logger = new Logger(ChatGateway.name);
 
@@ -58,7 +64,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         data: { onlineStatus: 'online' },
       });
 
-      this.broadcastPresence(client.userId!, 'online');
+      await this.broadcastPresence(client.userId!, 'online');
     } catch (err) {
       this.logger.warn(`Rejected socket connection: ${(err as Error).message}`);
       client.disconnect();
@@ -73,12 +79,36 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         where: { id: client.userId },
         data: { onlineStatus: 'offline', lastSeenAt: new Date() },
       });
-      this.broadcastPresence(client.userId, 'offline');
+      await this.broadcastPresence(client.userId, 'offline');
     }
   }
 
-  private broadcastPresence(userId: string, status: 'online' | 'offline') {
-    this.server.emit('presence:update', { userId, status });
+  private async broadcastPresence(userId: string, status: 'online' | 'offline') {
+    const rows = await this.prisma.privacySetting.findMany({ where: { userId } });
+    const map: any = {};
+    rows.forEach(r => { map[r.field] = r.value; });
+    const scope = map?.onlineStatus ?? 'EVERYONE';
+
+    if (scope === 'NOBODY') {
+      // никто не видит онлайн — шлём только "скрыт"
+      this.server.emit('presence:update', { userId, status: 'offline', hidden: true });
+      return;
+    }
+
+    const payload = {
+      userId,
+      status,
+      lastSeenAt: status === 'offline' ? new Date().toISOString() : null,
+    };
+
+    if (scope === 'CONTACTS') {
+      // онлайн видят только участники общих чатов
+      const chats = await this.prisma.chatMember.findMany({ where: { userId }, select: { chatId: true } });
+      for (const c of chats) this.server.to(`chat:${c.chatId}`).emit('presence:update', payload);
+      return;
+    }
+
+    this.server.emit('presence:update', payload);
   }
 
   @SubscribeMessage('message:send')
@@ -94,6 +124,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       attachments: body.attachments as any,
     });
     this.server.to(`chat:${body.chatId}`).emit('message:new', message);
+
+    // Обновляем метаданные чата и шлём всем участникам — для живого списка
+    const chat = await this.chatsService.findOneForUser(body.chatId, client.userId);
+    for (const member of chat.members) {
+      this.server.to(`user:${member.userId}`).emit('chat:updated', {
+        ...chat,
+        lastMessage: message,
+        updatedAt: new Date(),
+      });
+    }
+
     this.pushToOfflineMembers(body.chatId, client.userId, message);
     return message;
   }

@@ -38,4 +38,13 @@ export class MessagesController {
   react(@CurrentUser() user: any, @Param('id') id: string, @Body('emoji') emoji: string) {
     return this.messagesService.react(id, user.id, emoji);
   }
+  @Post('view')
+  markViewed(@CurrentUser() user: any, @Body() body: { messageIds: string[] }) {
+    return this.messagesService.markViewed(body.messageIds || [], user.id);
+  }
+
+  @Get(':id/views')
+  views(@Param('id') id: string) {
+    return this.messagesService.views(id);
+  }
 }

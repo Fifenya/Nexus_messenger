@@ -38,7 +38,7 @@ export class MessagesService {
             }
           : undefined,
       },
-      include: { sender: { select: SENDER_SELECT }, reactions: true, attachments: true },
+      include: { sender: { select: SENDER_SELECT }, reactions: { include: { user: { select: SENDER_SELECT } } }, attachments: true, views: { include: { user: { select: SENDER_SELECT } } } },
     });
 
     await this.prisma.chat.update({
@@ -57,7 +57,7 @@ export class MessagesService {
       orderBy: { createdAt: 'desc' },
       take,
       ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
-      include: { sender: { select: SENDER_SELECT }, reactions: true, attachments: true },
+      include: { sender: { select: SENDER_SELECT }, reactions: { include: { user: { select: SENDER_SELECT } } }, attachments: true, views: { include: { user: { select: SENDER_SELECT } } } },
     });
 
     return messages.reverse();
@@ -71,7 +71,7 @@ export class MessagesService {
     return this.prisma.message.update({
       where: { id: messageId },
       data: { text: dto.text, editedAt: new Date() },
-      include: { sender: { select: SENDER_SELECT }, reactions: true },
+      include: { sender: { select: SENDER_SELECT }, reactions: { include: { user: { select: SENDER_SELECT } } } },
     });
   }
 
@@ -102,5 +102,22 @@ export class MessagesService {
 
     await this.prisma.messageReaction.create({ data: { messageId, userId, emoji } });
     return { toggled: 'on', emoji, messageId, chatId: message.chatId, userId };
+  }
+
+  async markViewed(messageIds: string[], userId: string) {
+    if (!messageIds?.length) return { ok: true };
+    await this.prisma.messageView.createMany({
+      data: messageIds.map(id => ({ messageId: id, userId })),
+      skipDuplicates: true,
+    });
+    return { ok: true };
+  }
+
+  async views(messageId: string) {
+    return this.prisma.messageView.findMany({
+      where: { messageId },
+      include: { user: { select: SENDER_SELECT } },
+      orderBy: { viewedAt: 'desc' },
+    });
   }
 }

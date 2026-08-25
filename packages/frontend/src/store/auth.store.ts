@@ -30,21 +30,37 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: true,
 
-      initialize: () => {
+      initialize: async () => {
+        console.log('[auth] initialize start');
         const { token } = get();
-        if (token) {
-          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          // Проверяем валидность токена
-          api.get('/auth/me')
-            .then((res) => {
-              set({ user: res.data, isAuthenticated: true, isLoading: false });
-            })
-            .catch(() => {
-              set({ user: null, token: null, isAuthenticated: false, isLoading: false });
-              delete api.defaults.headers.common['Authorization'];
-            });
-        } else {
+        
+        // Глобальная страховка: через 6 секунд форсируем загрузку
+        const forceTimer = setTimeout(() => {
+          console.warn('[auth] force timeout 6s');
           set({ isLoading: false });
+        }, 6000);
+        
+        if (!token) {
+          clearTimeout(forceTimer);
+          console.log('[auth] no token, skip');
+          set({ isLoading: false });
+          return;
+        }
+        
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        try {
+          const res = await Promise.race([
+            api.get('/auth/me'),
+            new Promise<never>((_, rej) => setTimeout(() => rej(new Error('me timeout')), 5000)),
+          ]);
+          clearTimeout(forceTimer);
+          console.log('[auth] me ok:', res.data?.username);
+          set({ user: res.data, isAuthenticated: true, isLoading: false });
+        } catch (e) {
+          clearTimeout(forceTimer);
+          console.warn('[auth] me failed:', (e as Error).message);
+          set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+          delete api.defaults.headers.common['Authorization'];
         }
       },
 

@@ -40,11 +40,20 @@ export default function PrivacyPage() {
         <section className="rounded-2xl border p-4 space-y-3" style={card}>
           <div className="text-xs font-semibold uppercase tracking-wide" style={muted}>Кто видит</div>
           <div className="flex items-center justify-between">
-            <span>Телефон</span>
-            <select className="nexus-input !w-auto" value={settings.phoneVisibility || 'EVERYONE'} onChange={e => update('phoneVisibility', e.target.value)}>
-              <option value="EVERYONE">Все</option>
-              <option value="CONTACTS">Контакты</option>
-              <option value="NOBODY">Никто</option>
+            <div className="flex-1">
+              <span>Видимость в поиске</span>
+              <div className="text-xs" style={muted}>
+                {settings.searchVisibility === 'EXACT' ? 'только точное @username'
+                  : settings.searchVisibility === 'STARTS_WITH' ? 'если вводить начало ника'
+                  : settings.searchVisibility === 'CONTAINS' ? 'если ник содержит запрос'
+                  : 'по нику и имени'}
+              </div>
+            </div>
+            <select className="nexus-input !w-auto" value={settings.searchVisibility || 'NAME'} onChange={e => update('searchVisibility', e.target.value)}>
+              <option value="EXACT">Точное совпадение</option>
+              <option value="STARTS_WITH">Начинается с</option>
+              <option value="CONTAINS">Содержит</option>
+              <option value="NAME">Везде</option>
             </select>
           </div>
           <div className="flex items-center justify-between">
@@ -58,6 +67,22 @@ export default function PrivacyPage() {
           <div className="flex items-center justify-between">
             <span>Последний визит</span>
             <select className="nexus-input !w-auto" value={settings.lastSeen || 'EVERYONE'} onChange={e => update('lastSeen', e.target.value)}>
+              <option value="EVERYONE">Все</option>
+              <option value="CONTACTS">Контакты</option>
+              <option value="NOBODY">Никто</option>
+            </select>
+          </div>
+          <div className="flex items-center justify-between">
+            <span>Аватарка</span>
+            <select className="nexus-input !w-auto" value={settings.profilePhoto || 'EVERYONE'} onChange={e => update('profilePhoto', e.target.value)}>
+              <option value="EVERYONE">Все</option>
+              <option value="CONTACTS">Контакты</option>
+              <option value="NOBODY">Никто</option>
+            </select>
+          </div>
+          <div className="flex items-center justify-between">
+            <span>Профиль («о себе»)</span>
+            <select className="nexus-input !w-auto" value={settings.profile || 'EVERYONE'} onChange={e => update('profile', e.target.value)}>
               <option value="EVERYONE">Все</option>
               <option value="CONTACTS">Контакты</option>
               <option value="NOBODY">Никто</option>
