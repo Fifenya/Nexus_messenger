@@ -1,0 +1,330 @@
+====================================================
+    ДИАГНОСТИКА HP 530 - ДОМАШНИЙ СЕРВЕР
+    Дата: Пт 28 авг 2026 19:35:30 +06
+====================================================
+========== 1. ЖЕЛЕЗО ==========
+--- 1.1 Процессор (CPU) ---
+Архитектура:                             x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           36 bits physical, 48 bits virtual
+Порядок байт:                            Little Endian
+CPU(s):                                  2
+On-line CPU(s) list:                     0,1
+ID прроизводителя:                       GenuineIntel
+Имя модели:                              Intel(R) Core(TM)2 CPU         T7200  @ 2.00GHz
+Семейство ЦПУ:                           6
+Модель:                                  15
+Потоков на ядро:                         1
+Ядер на сокет:                           2
+Сокетов:                                 1
+Степпинг:                                6
+CPU(s) scaling MHz:                      100%
+CPU max MHz:                             2000,0000
+CPU min MHz:                             1000,0000
+BogoMIPS:                                3990,03
+Флаги:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx lm constant_tsc arch_perfmon pebs bts rep_good nopl cpuid aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm lahf_lm pti dtherm
+L1d cache:                               64 KiB (2 instances)
+L1i cache:                               64 KiB (2 instances)
+L2 cache:                                4 MiB (1 instance)
+NUMA node(s):                            1
+NUMA node0 CPU(s):                       0,1
+Vulnerability Gather data sampling:      Not affected
+Vulnerability Ghostwrite:                Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             KVM: Mitigation: VMX unsupported
+Vulnerability L1tf:                      Mitigation; PTE Inversion
+Vulnerability Mds:                       Vulnerable: Clear CPU buffers attempted, no microcode; SMT disabled
+Vulnerability Meltdown:                  Mitigation; PTI
+Vulnerability Mmio stale data:           Not affected
+Vulnerability Old microcode:             Vulnerable
+Vulnerability Reg file data sampling:    Not affected
+Vulnerability Retbleed:                  Not affected
+Vulnerability Spec rstack overflow:      Not affected
+Vulnerability Spec store bypass:         Vulnerable
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Not affected
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Not affected
+Текущая частота всех ядер:
+cpu MHz		: 1995.016
+cpu MHz		: 1995.159
+--- 1.2 Оперативная память (RAM) ---
+Общий объём:
+               всего        занят        своб      общая  буф/врем.   доступно
+Память:        1,9Gi       918Mi       198Mi        65Mi       1,0Gi       1,0Gi
+Подкачка:        9Gi       712Mi       9,3Gi
+Детали по слотам (dmidecode):
+	Error Correction Type: None
+	Size: 1 GB
+	Type: DDR2
+	Speed: 975 MT/s
+	Manufacturer: 0000000000000000
+	Size: 1 GB
+	Type: DDR2
+	Speed: 975 MT/s
+	Manufacturer: 0000000000000000
+--- 1.3 Дисковая подсистема (Storage) ---
+SATA-контроллер и скорость линка:
+Модель и параметры диска:
+	Model Number:       TOSHIBA MK8037GSX                       
+	Firmware Revision:  DL232C  
+Текущая скорость чтения (кэш + накопитель):
+
+/dev/sda:
+ Timing cached reads:   3404 MB in  2.00 seconds = 1705.48 MB/sec
+ Timing buffered disk reads: 120 MB in  3.04 seconds =  39.49 MB/sec
+SMART-статус (критические атрибуты):
+--- 1.4 Температуры и вентиляторы ---
+C1AC-acpi-0
+Adapter: ACPI interface
+in0:          16.65 V  
+curr1:         0.00 A  
+
+coretemp-isa-0000
+Adapter: ISA adapter
+Core 0:       +55.0°C  (crit = +100.0°C)
+Core 1:       +53.0°C  (crit = +100.0°C)
+
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +55.0°C  
+temp2:        +53.0°C  
+temp3:        +45.0°C  
+temp4:        +30.4°C  
+temp5:        +50.0°C  
+
+Температура диска (если есть):
+--- 1.5 Батарея и питание ---
+========== 2. ЯДРО И ПАРАМЕТРЫ СИСТЕМЫ ==========
+--- 2.1 Версия ядра и параметры загрузки ---
+Linux hp530-server 7.0.0-29-generic #29~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Wed Aug 12 17:25:56 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+BOOT_IMAGE=/boot/vmlinuz-7.0.0-29-generic root=UUID=ee696fb2-4cc3-4434-a6ba-7ab5f3dea8d5 ro quiet splash
+--- 2.2 Загруженные модули ядра (только критичные) ---
+usbhid                 77824  0
+hid                   282624  2 usbhid,hid_generic
+usbnet                 61440  2 rndis_host,cdc_ether
+usbserial              69632  1 ch341
+inet_diag              20480  2 tcp_diag,udp_diag
+nf_conntrack_netlink    57344  0
+nf_conntrack          192512  6 xt_conntrack,nf_nat,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE
+rtw88_usb              28672  1 rtw88_8723du
+rtw88_core            360448  3 rtw88_8723d,rtw88_usb,rtw88_8723x
+mac80211             1892352  2 rtw88_core,rtw88_usb
+nfnetlink              20480  6 nft_compat,nf_conntrack_netlink,nf_tables,ip_set
+btrfs                2269184  0
+libblake2b             24576  1 btrfs
+xor                    24576  2 async_xor,btrfs
+raid6_pq              131072  4 async_pq,btrfs,raid456,async_raid6_recov
+ahci                   49152  2
+mii                    20480  2 usbnet,e100
+libahci                53248  1 ahci
+--- 2.3 Распределение прерываний (IRQ) ---
+           CPU0       CPU1       
+  0:   44178619          0  IO-APIC   2-edge      timer
+  1:       3826          0  IO-APIC   1-edge      i8042
+  8:          0          1  IO-APIC   8-edge      rtc0
+  9:          0       1827  IO-APIC   9-fasteoi   acpi
+ 12:          0     249444  IO-APIC  12-edge      i8042
+ 14:      77481          0  IO-APIC  14-edge      ata_piix
+ 15:          0          0  IO-APIC  15-edge      ata_piix
+ 16:          0     126088  IO-APIC  16-fasteoi   i915
+ 20:    9437811          0  IO-APIC  20-fasteoi   uhci_hcd:usb1, ehci_hcd:usb2, enp2s8
+========== 3. ПАМЯТЬ И СВОП ==========
+--- 3.1 Использование RAM и Swap ---
+               всего        занят        своб      общая  буф/врем.   доступно
+Память:         1955         993         201          64         986         961
+Подкачка:      10239         712        9527
+--- 3.2 Процессы, жрущие память (TOP 10) ---
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+fifenya  1689569 11.4  5.7 1029116 115408 ?      Ssl  19:35   0:03 /usr/bin/node -max-old-space-size=384 dist/main.js
+fifenya  1689686  9.9  4.6 21904296 93396 ?      Sl   19:35   0:02 node /home/fifenya/Nexus_messenger/packages/frontend/node_modules/.bin/vite --host 0.0.0.0
+root         945  0.9  4.3 1178672 87952 ?       Ssl  авг27  12:22 /bin/warp-svc
+root     1633792  0.2  3.7 1525056 75988 ?       Ssl  18:38   0:08 minio server /data --console-address :9001
+fifenya  1689570  2.0  2.6 698604 53316 ?        Ssl  19:35   0:00 npm run dev --host 0.0.0.0
+root        1541  0.7  2.3 2492228 46236 ?       Ssl  авг27  10:30 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+fifenya  1625058  5.7  2.1 550476 42456 ?        Sl   18:16   4:35 thunar
+fifenya  1689363  2.4  1.9 1294464 39564 ?       Ssl  19:35   0:01 /usr/local/bin/cloudflared tunnel --url http://localhost:5173 --no-autoupdate --metrics 127.0.0.1:20241
+fifenya  1582423  0.0  1.9 889096 39500 ?        Sl   16:45   0:01 mintUpdate
+root         267  0.2  1.7  91708 34060 ?        S<s  авг27   3:54 /usr/lib/systemd/systemd-journald
+--- 3.3 Своп-статистика ---
+Filename				Type		Size		Used		Priority
+/swapfile                               file		10485756	729784		-1
+60
+========== 4. ФАЙЛОВАЯ СИСТЕМА ==========
+--- 4.1 Разделы и точка монтирования ---
+Файл.система   Размер Использовано  Дост Использовано% Cмонтировано в
+tmpfs            196M         1,9M  194M            1% /run
+/dev/sda3         73G          39G   31G           56% /
+tmpfs            978M            0  978M            0% /dev/shm
+tmpfs            5,0M         8,0K  5,0M            1% /run/lock
+/dev/sda2        512M         6,2M  506M            2% /boot/efi
+tmpfs            196M         132K  196M            1% /run/user/1000
+--- 4.2 Inodes (если закончатся — сервер ляжет) ---
+Файл.система    Iнодов IИспользовано IСвободно IИспользовано% Cмонтировано в
+tmpfs           250274          1052    249222             1% /run
+/dev/sda3      4857856        719709   4138147            15% /
+tmpfs           250274             1    250273             1% /dev/shm
+tmpfs           250274             5    250269             1% /run/lock
+/dev/sda2            0             0         0              - /boot/efi
+tmpfs            50054           135     49919             1% /run/user/1000
+--- 4.3 fstab (автомонтирование) ---
+UUID=ee696fb2-4cc3-4434-a6ba-7ab5f3dea8d5 /               ext4    errors=remount-ro 0       1
+UUID=006F-3D85  /boot/efi       vfat    umask=0077      0       1
+/swapfile                                 none            swap    sw              0       0
+--- 4.4 I/O статистика за время работы ---
+========== 5. СЕТЬ ==========
+--- 5.1 Интерфейсы и IP ---
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+2: enp2s8: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+    link/ether 00:1b:38:bd:60:be brd ff:ff:ff:ff:ff:ff
+5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default 
+    link/ether 8a:3e:bb:97:68:19 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+29: br-7c1f1fcd111c: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 72:8a:67:cc:b5:6d brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-7c1f1fcd111c
+30: veth4284f6f@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7c1f1fcd111c state UP group default 
+    link/ether 5a:8b:7e:1c:6a:7b brd ff:ff:ff:ff:ff:ff link-netnsid 0
+31: veth89eaccf@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7c1f1fcd111c state UP group default 
+    link/ether b2:1e:6b:17:7e:08 brd ff:ff:ff:ff:ff:ff link-netnsid 1
+32: veth4568e8f@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7c1f1fcd111c state UP group default 
+    link/ether a6:fd:3c:0c:7e:a2 brd ff:ff:ff:ff:ff:ff link-netnsid 2
+33: wifi-usb: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether fc:22:1c:40:06:fe brd ff:ff:ff:ff:ff:ff
+    inet 10.119.80.126/24 brd 10.119.80.255 scope global dynamic noprefixroute wifi-usb
+--- 5.2 Маршрутизация ---
+default via 10.119.80.77 dev wifi-usb proto dhcp src 10.119.80.126 metric 600 
+10.119.80.0/24 dev wifi-usb proto kernel scope link src 10.119.80.126 metric 600 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+172.18.0.0/16 dev br-7c1f1fcd111c proto kernel scope link src 172.18.0.1 
+--- 5.3 Открытые порты (слушающие) ---
+Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                   
+udp   UNCONN 0      0            0.0.0.0:69         0.0.0.0:*                                             
+udp   UNCONN 0      0            0.0.0.0:5353       0.0.0.0:*                                             
+udp   UNCONN 0      0            0.0.0.0:43313      0.0.0.0:*                                             
+udp   UNCONN 0      0         127.0.0.54:53         0.0.0.0:*                                             
+udp   UNCONN 0      0      127.0.0.53%lo:53         0.0.0.0:*                                             
+udp   UNCONN 0      0               [::]:69            [::]:*                                             
+udp   UNCONN 0      0               [::]:5353          [::]:*                                             
+udp   UNCONN 0      0                  *:34225            *:*    users:(("cloudflared",pid=1689363,fd=14))
+udp   UNCONN 0      0               [::]:37570         [::]:*                                             
+tcp   LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*    users:(("node",pid=1689686,fd=27))       
+tcp   LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*                                             
+tcp   LISTEN 0      4096       127.0.0.1:20241      0.0.0.0:*    users:(("cloudflared",pid=1689363,fd=10))
+tcp   LISTEN 0      4096         0.0.0.0:6379       0.0.0.0:*                                             
+tcp   LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*                                             
+tcp   LISTEN 0      4096         0.0.0.0:5432       0.0.0.0:*                                             
+tcp   LISTEN 0      4096         0.0.0.0:9000       0.0.0.0:*                                             
+tcp   LISTEN 0      4096         0.0.0.0:9001       0.0.0.0:*                                             
+tcp   LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*                                             
+tcp   LISTEN 0      4096       127.0.0.1:45297      0.0.0.0:*                                             
+tcp   LISTEN 0      4096       127.0.0.1:11434      0.0.0.0:*                                             
+tcp   LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*                                             
+tcp   LISTEN 0      4096           [::1]:631           [::]:*                                             
+tcp   LISTEN 0      4096            [::]:22            [::]:*                                             
+tcp   LISTEN 0      4096            [::]:6379          [::]:*                                             
+tcp   LISTEN 0      4096            [::]:5432          [::]:*                                             
+tcp   LISTEN 0      4096            [::]:9000          [::]:*                                             
+tcp   LISTEN 0      4096            [::]:9001          [::]:*                                             
+tcp   LISTEN 0      511                *:3000             *:*    users:(("node",pid=1689569,fd=25))       
+tcp   LISTEN 0      4096               *:9090             *:*                                             
+--- 5.4 Активные соединения ---
+ESTAB    0      0          127.0.0.1:38244      127.0.0.1:5432  users:(("node",pid=1689569,fd=24))      
+ESTAB    0      0         172.18.0.1:60892     172.18.0.4:5432                                          
+ESTAB    0      0      10.119.80.126:33902 104.16.231.132:443   users:(("cloudflared",pid=1689363,fd=4))
+ESTAB    0      272    10.119.80.126:41628  162.159.192.1:443                                           
+SYN-SENT 0      1      10.119.80.126:59634  192.168.1.100:8022  users:(("ssh",pid=1690314,fd=3))        
+ESTAB    0      0          127.0.0.1:5432       127.0.0.1:38244                                         
+--- 5.5 Wi-Fi модуль (если активен) ---
+wifi-usb  IEEE 802.11  ESSID:"internet"  
+          Mode:Managed  Frequency:2.467 GHz  Access Point: E6:B7:9E:3C:C3:DF   
+          Bit Rate=72.2 Mb/s   Tx-Power=20 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on
+          Link Quality=70/70  Signal level=-14 dBm  
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+--- 5.6 Cloudflare туннель (активные процессы) ---
+fifenya  1689363  2.4  1.9 1294464 39564 ?       Ssl  19:35   0:01 /usr/local/bin/cloudflared tunnel --url http://localhost:5173 --no-autoupdate --metrics 127.0.0.1:20241
+========== 6. ПРОЦЕССЫ И НАГРУЗКА ==========
+--- 6.1 Load Average (1,5,15 мин) ---
+ 19:35:53 up 22:01,  3 users,  load average: 2,16, 0,95, 0,70
+--- 6.2 Процессы, жрущие CPU (TOP 10) ---
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+fifenya  1690486  200  0.2  15000  5572 pts/1    R+   19:35   0:00 ps aux --sort=-%cpu
+fifenya  1689569 11.4  5.7 1029116 115408 ?      Ssl  19:35   0:03 /usr/bin/node -max-old-space-size=384 dist/main.js
+fifenya  1689686  9.8  4.6 21904296 93396 ?      Sl   19:35   0:02 node /home/fifenya/Nexus_messenger/packages/frontend/node_modules/.bin/vite --host 0.0.0.0
+fifenya  1582853  5.8  1.1 473428 23404 ?        Sl   16:46   9:55 xfce4-taskmanager
+fifenya  1625058  5.7  2.1 550476 42456 ?        Sl   18:16   4:35 thunar
+fifenya  1689363  2.4  1.9 1294464 39564 ?       Ssl  19:35   0:01 /usr/local/bin/cloudflared tunnel --url http://localhost:5173 --no-autoupdate --metrics 127.0.0.1:20241
+fifenya  1689570  2.0  2.6 698604 53316 ?        Ssl  19:35   0:00 npm run dev --host 0.0.0.0
+dnsmasq  1633785  1.9  0.1  39388  2760 ?        Ssl  18:38   1:06 redis-server *:6379
+fifenya  1581928  0.9  1.3 566728 27132 ?        Sl   16:44   1:38 mintreport-tray
+root         945  0.9  4.3 1178672 87952 ?       Ssl  авг27  12:22 /bin/warp-svc
+--- 6.3 Состояние всех Docker-контейнеров ---
+NAMES            STATUS                    IMAGE                                      PORTS
+nexus-postgres   Up 57 minutes (healthy)   postgres:15-alpine                         0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+nexus-redis      Up 57 minutes (healthy)   redis:7-alpine                             0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+nexus-minio      Up 57 minutes (healthy)   minio/minio:RELEASE.2023-10-25T06-33-25Z   0.0.0.0:9000-9001->9000-9001/tcp, [::]:9000-9001->9000-9001/tcp
+--- 6.4 Ресурсы Docker (контейнеры) ---
+CONTAINER ID   NAME             CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS
+f46d8152273b   nexus-postgres   0.00%     11.21MiB / 1.909GiB   0.57%     48.8kB / 23.7kB   51.1MB / 10.5MB   7
+6a610dff6089   nexus-redis      1.90%     3.004MiB / 1.909GiB   0.15%     25.9kB / 126B     37.4MB / 1.75MB   6
+00312ead850b   nexus-minio      0.28%     126MiB / 1.909GiB     6.44%     26.8kB / 126B     327MB / 63.3MB    9
+========== 7. POSTGRESQL ==========
+PostgreSQL НЕ ЗАПУЩЕН или не установлен.
+========== 8. UFW + FAIL2BAN ==========
+--- 8.1 Статус UFW ---
+Состояние: активен
+Журналирование: on (low)
+По умолчанию: deny (входящие), allow (исходящие), deny (маршрутизированные)
+Новые профили: skip
+
+В                          Действие    Из
+-                          --------    --
+3000/tcp                   ALLOW IN    Anywhere                  
+5173/tcp                   ALLOW IN    Anywhere                  
+22/tcp                     ALLOW IN    Anywhere                  
+80/tcp                     ALLOW IN    Anywhere                  
+443/tcp                    ALLOW IN    Anywhere                  
+Anywhere on enp2s8         ALLOW IN    Anywhere                  
+60000:61000/udp            ALLOW IN    Anywhere                  
+3000/tcp (v6)              ALLOW IN    Anywhere (v6)             
+5173/tcp (v6)              ALLOW IN    Anywhere (v6)             
+22/tcp (v6)                ALLOW IN    Anywhere (v6)             
+80/tcp (v6)                ALLOW IN    Anywhere (v6)             
+443/tcp (v6)               ALLOW IN    Anywhere (v6)             
+Anywhere (v6) on enp2s8    ALLOW IN    Anywhere (v6)             
+60000:61000/udp (v6)       ALLOW IN    Anywhere (v6)             
+
+--- 8.2 Fail2ban (забаненные IP) ---
+Status
+|- Number of jail:	1
+`- Jail list:	sshd
+--- 8.3 Последние 10 строк лога SSH (атаки) ---
+========== 9. КРИТИЧНЫЕ ПАРАМЕТРЫ ЯДРА ==========
+--- 9.1 Ограничения на открытые файлы (FD) ---
+1024
+--- 9.2 Текущие открытые файлы (всех процессов) ---
+32573
+--- 9.3 Параметры сети (таймауты, буферы) ---
+net.ipv4.tcp_fin_timeout = 60
+net.core.rmem_default = 212992
+net.core.wmem_default = 212992
+========== 10. ПОСЛЕДНИЕ КРИТИЧЕСКИЕ ОШИБКИ ==========
+--- 10.1 Ядро (dmesg) ---
+--- 10.2 Системный журнал (syslog) ---
+====================================================
+ДИАГНОСТИКА ЗАВЕРШЕНА
+Полный отчёт сохранён в: hp530_diag_20260828_193530.txt
+====================================================
+Размер отчёта: 24K
+========== КРАТКОЕ РЕЗЮМЕ (ЧТО ПРОВЕРИТЬ) ==========
+[!] Обнаружен файл подкачки. На HDD это убивает производительность.
+[-] Диск НЕ поддерживает TRIM (скорее всего HDD).
+[+] PostgreSQL слушает порт 5432 (проверь, не открыт ли наружу).
+Готово! Отправь этот файл советнику, чтобы получить рекомендации.

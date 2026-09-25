@@ -7,7 +7,7 @@ CHAT_FILE = os.path.expanduser('~/.tg_chat_id' + ('_friends' if MODE == 'friends
 STATS = os.path.expanduser('~/.nexus_stats.json')
 MSG_FILE = os.path.expanduser('~/.tg_msg_id' + ('_friends' if MODE == 'friends' else ''))
 TUN_FILE = os.path.expanduser('~/.nexus_tunnel')
-LAN = 'http://172.25.209.126:5173'
+LAN = 'http://192.168.1.100:5173'
 
 PHRASES = ['полёт нормальный 🚀', 'сервер мурчит как кот 🐈', 'всё стабильно, идите общайтесь ☕',
            'держусь и люблю вас ❤️', 'тихо и спокойно 🌙', 'работаем, братцы 🔧', 'ни одного краша, рекорд! 🏆']
@@ -111,15 +111,13 @@ def main():
             r = tg('editMessageText', {'chat_id': chat, 'message_id': msg_id, 'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': 'true'})
             ok = bool(r and r.get('ok'))
             if not ok and r and 'not modified' in str(r.get('description', '')): ok = True
-            if not ok and r and 'Too Many' in str(r.get('description', '')):
-                time.sleep(5); continue
             if not ok: msg_id = None
         if not msg_id:
             r = tg('sendMessage', {'chat_id': chat, 'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': 'true'})
             if r and r.get('ok'):
                 msg_id = r['result']['message_id']
                 save_msg_id(msg_id)
-        time.sleep(10)
+        time.sleep(30)
 
 if __name__ == '__main__':
     main()
