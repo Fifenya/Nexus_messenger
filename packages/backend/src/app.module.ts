@@ -12,6 +12,7 @@ import { BotsModule } from './bots/bots.module';
 import { NexusMotesModule } from './nexus-motes/nexus-motes.module';
 import { ThemesModule } from './themes/themes.module';
 import { PrivacyModule } from './privacy/privacy.module';
+imlort { PasswordResetModule } from './password-reset/password-reset.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PrivacyModule } from './privacy/privacy.module';
     ThemesModule,
     PrivacyModule,
     UploadsModule,
+    PasswordResetModule,
   ],
 })
 export class AppModule {}
